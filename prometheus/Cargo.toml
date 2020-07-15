@@ -10,3 +10,4 @@ edition = "2018"
 prometheus = { version = "0.8", features = ["nightly"] }
 rocket = "0.4.5"
 tokio = { version = "0.2", features = ["macros"] }
+lazy_static = "1.4.0"
