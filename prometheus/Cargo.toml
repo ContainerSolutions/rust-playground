@@ -8,5 +8,5 @@ edition = "2018"
 
 [dependencies]
 prometheus = { version = "0.8", features = ["nightly"] }
-rocket = "0.4.4"
+rocket = "0.4.5"
 tokio = { version = "0.2", features = ["macros"] }
