@@ -18,9 +18,10 @@ use warp::Filter;
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
-
+    // GET / path
     let root =  warp::path::end().map(|| "Rust Playground - warp");
 
+    // GET v2
     let v2  = warp::path("v2").and(warp::path::end())
         .map(||
             "OCI root"
@@ -29,8 +30,8 @@ async fn main() {
     // GET manifests
     let manifest_one = warp::path!(String / "manifests" / String)
         .map(|name, reference |
-            format!("name = {} reference = {}",name ,reference )
-            );
+            format!("name = {} reference = {}", name, reference )
+        );
 
     let manifest_two = warp::path!( String / String / "manifests" / String)
         .map(|user, repository, reference| 
@@ -43,15 +44,16 @@ async fn main() {
         );
     let manifest_four = warp::path!(String/ String / String / String / "manifests" /String)
         .map(|fourth, org, user, repository, reference| 
-            format!("name = {}/{}/{}/{} reference = {}",fourth , org, user, repository,  reference) );
+            format!("name = {}/{}/{}/{} reference = {}", fourth, org, user, repository, reference) 
+        );
     
     let manifests = warp::path("v2").and(manifest_one.or(manifest_two).or(manifest_three).or(manifest_four));
 
     // GET blobs      
     let blob_one = warp::path!(String / "blobs" / String)
         .map(|name, digest |
-            format!("name = {} digest = {}",name ,digest )
-            );
+            format!("name = {} digest = {}", name, digest)
+        );
 
     let blob_two = warp::path!( String / String / "blobs" / String)
         .map(|user, repository, digest| 
@@ -64,7 +66,7 @@ async fn main() {
         );
     let blob_four = warp::path!(String / String / String / String / "blobs" /String)
         .map(|fourth, org, user, repository, digest| 
-            format!("name = {}/{}/{}/{} digest = {}",fourth , org, user, repository,  digest) );
+            format!("name = {}/{}/{}/{} digest = {}", fourth, org, user, repository, digest) );
     
     let blobs = warp::path("v2").and(blob_one.or(blob_two).or(blob_three).or(blob_four));
 
