@@ -20,9 +20,13 @@ async fn main() {
     pretty_env_logger::init();
     // GET / path
     let root =  warp::path::end().map(|| "Rust Playground - warp");
+    
+    // prefix
+    let oci = warp::path!("v2" / ..);
 
-    // GET v2
-    let v2  = warp::path("v2").and(warp::path::end())
+    // GET v2/
+
+    let oci_root  = oci.and(warp::path::end())
         .map(||
             "OCI root"
         );
@@ -47,7 +51,7 @@ async fn main() {
             format!("name = {}/{}/{}/{} reference = {}", fourth, org, user, repository, reference) 
         );
     
-    let manifests = warp::path("v2").and(manifest_one.or(manifest_two).or(manifest_three).or(manifest_four));
+    let manifests = oci.and(manifest_one.or(manifest_two).or(manifest_three).or(manifest_four));
 
     // GET blobs      
     let blob_one = warp::path!(String / "blobs" / String)
@@ -68,9 +72,9 @@ async fn main() {
         .map(|fourth, org, user, repository, digest| 
             format!("name = {}/{}/{}/{} digest = {}", fourth, org, user, repository, digest) );
     
-    let blobs = warp::path("v2").and(blob_one.or(blob_two).or(blob_three).or(blob_four));
+    let blobs = oci.and(blob_one.or(blob_two).or(blob_three).or(blob_four));
 
-    let routes = warp::get().and(root.or(v2).or(manifests).or(blobs));
+    let routes = warp::get().and(root.or(oci_root).or(manifests).or(blobs));
 
     warp::serve(routes)
         .run(([127, 0, 0, 1], 3030))
