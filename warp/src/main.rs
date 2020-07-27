@@ -15,18 +15,24 @@
 
 use warp::Filter;
 
+macro_rules! router {
+    ($($e:expr),*) => {
+        $(
+            println!("route: {}", $e);
+        )*
+    };
+}
+
+
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
     // GET / path
     let root =  warp::path::end().map(|| "Rust Playground - warp");
-    
-    // prefix
-    let oci = warp::path!("v2" / ..);
-
-    // GET v2/
-
-    let oci_root  = oci.and(warp::path::end())
+    router!("r1");
+    // GET v2
+    let oci_v2    = warp::path("v2");
+    let oci_root = oci_v2.and(warp::path::end())
         .map(||
             "OCI root"
         );
@@ -46,12 +52,12 @@ async fn main() {
         .map(|org, user , repository , reference| 
             format!("name = {}/{}/{} reference = {}", org, user, repository,  reference)    
         );
-    let manifest_four = warp::path!(String/ String / String / String / "manifests" /String)
+    let manifest_four = warp::path!(String / String / String / String / "manifests" /String)
         .map(|fourth, org, user, repository, reference| 
             format!("name = {}/{}/{}/{} reference = {}", fourth, org, user, repository, reference) 
         );
     
-    let manifests = oci.and(manifest_one.or(manifest_two).or(manifest_three).or(manifest_four));
+    let manifests = oci_v2.and(manifest_one.or(manifest_two).or(manifest_three).or(manifest_four));
 
     // GET blobs      
     let blob_one = warp::path!(String / "blobs" / String)
@@ -72,7 +78,7 @@ async fn main() {
         .map(|fourth, org, user, repository, digest| 
             format!("name = {}/{}/{}/{} digest = {}", fourth, org, user, repository, digest) );
     
-    let blobs = oci.and(blob_one.or(blob_two).or(blob_three).or(blob_four));
+    let blobs = oci_v2.and(blob_one.or(blob_two).or(blob_three).or(blob_four));
 
     let routes = warp::get().and(root.or(oci_root).or(manifests).or(blobs));
 
