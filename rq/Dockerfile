@@ -1,7 +1,4 @@
 FROM --platform=${BUILDPLATFORM:-linux/amd64} rust:latest as builder
-
-RUN rustup default nightly
-
 WORKDIR /usr/src/rq
 
 COPY Cargo.toml Cargo.lock ./
