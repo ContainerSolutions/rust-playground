@@ -35,10 +35,9 @@ async fn main() {
 
     let index = warp::path::end().and(warp::get()).and_then(handlers::index);
 
-    let version = warp::path("version").and(warp::get()).map(|| {
-        info!("version");
-        format!("{}", VERSION)
-    });
+    let version = warp::path("version")
+        .and(warp::get())
+        .and_then(handlers::version);
 
     let playground = warp::path("playground")
         .and(warp::get())

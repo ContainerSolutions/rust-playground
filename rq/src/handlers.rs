@@ -27,3 +27,9 @@ pub async fn playground() -> Result<Box<dyn warp::Reply>, warp::Rejection> {
     let res = format!("playground:{}", crate::VERSION);
     Ok(Box::new(warp::reply::json(&res)))
 }
+
+pub async fn version() -> Result<Box<dyn warp::Reply>, warp::Rejection> {
+    info!("version");
+    let res = format!("{}", crate::VERSION);
+    Ok(Box::new(warp::reply::json(&res)))
+}
