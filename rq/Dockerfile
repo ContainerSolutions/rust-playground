@@ -11,8 +11,9 @@ RUN mkdir src/ \
 RUN cargo build --release
 
 COPY . .
-RUN cargo install --path .
+RUN cargo build --release  
 
-FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:latest
-COPY --from=builder /usr/local/cargo/bin/rq /usr/local/bin/rq
+FROM --platform=${BUILDPLATFORM:-linux/amd64} debian:buster-slim
+ENV RUST_LOG=info
+COPY --from=builder /usr/src/rq/target/release/rq /usr/local/bin/rq
 CMD ["rq"]
