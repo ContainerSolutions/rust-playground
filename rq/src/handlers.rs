@@ -1,6 +1,5 @@
 
-use prometheus::{Counter, TextEncoder, Encoder};
-use warp::Filter;
+use prometheus::{TextEncoder, Encoder};
 
 pub async fn metrics() -> Result<Box<dyn warp::Reply>, warp::Rejection> {
 

@@ -3,7 +3,7 @@
 #[macro_use] extern crate prometheus;
 #[macro_use] extern crate lazy_static;
 
-use prometheus::{Counter, TextEncoder, Encoder};
+use prometheus::Counter;
 use warp::Filter;
 
 mod handlers;
