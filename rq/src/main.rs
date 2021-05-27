@@ -4,11 +4,15 @@
 extern crate prometheus;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate log;
 
 use prometheus::Counter;
 use warp::Filter;
 
 mod handlers;
+
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 lazy_static! {
     static ref PLAYGROUND_HTTP_REQUESTS: Counter = register_counter!(opts!(
@@ -29,21 +33,23 @@ lazy_static! {
 async fn main() {
     pretty_env_logger::init();
 
-    let index = warp::path::end().and(warp::get()).map(|| {
-        MAIN_HTTP_REQUESTS.inc();
-        "rq: OK"
+    let index = warp::path::end().and(warp::get()).and_then(handlers::index);
+
+    let version = warp::path("version").and(warp::get()).map(|| {
+        info!("version");
+        format!("{}", VERSION)
     });
 
-    let playground = warp::path("playground").and(warp::get()).map(|| {
-        PLAYGROUND_HTTP_REQUESTS.inc();
-        "rq: Playground OK"
-    });
+    let playground = warp::path("playground")
+        .and(warp::get())
+        .and_then(handlers::playground);
 
     let metrics = warp::path("metrics")
         .and(warp::get())
         .and_then(handlers::metrics);
 
-    let routes = index.or(metrics).or(playground);
+    let routes = index.or(metrics).or(playground).or(version);
 
-    warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
+    info!("rq starting: {}", VERSION);
+    warp::serve(routes).run(([0, 0, 0, 0], 8000)).await;
 }
