@@ -4,8 +4,12 @@ on:
     branches: [ main ]
     tags:
       - '*'
+    paths-ignore:
+      - 'charts/'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'charts/'
 
 jobs:
 
