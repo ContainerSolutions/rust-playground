@@ -5,11 +5,11 @@ on:
     tags:
       - '*'
     paths-ignore:
-      - 'charts/'
+      - 'charts/**'
   pull_request:
     branches: [ main ]
     paths-ignore:
-      - 'charts/'
+      - 'charts/**'
 
 jobs:
 
