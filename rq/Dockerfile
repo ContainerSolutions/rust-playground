@@ -7,7 +7,7 @@ RUN mkdir src/ \
     && echo 'fn main() { println!("build.rs"); }' > src/main.rs
 RUN cargo build --release
 
-RUN rm -fr src/
+RUN rm -fr src/ target/ /usr/local/cargo/bin/rq
 COPY ./src ./src
 RUN cargo install --path .
 
