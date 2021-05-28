@@ -7,7 +7,7 @@ RUN mkdir src/ \
     && echo 'fn main() { println!("cache dependencies"); }' > src/main.rs
 RUN cargo build --release
 
-COPY . .
+COPY src ./src
 RUN cargo install --path .
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} debian:buster-slim
