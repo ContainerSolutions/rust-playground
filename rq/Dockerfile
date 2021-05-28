@@ -4,11 +4,11 @@ WORKDIR /usr/src/rq
 COPY Cargo.toml Cargo.lock ./
 
 RUN mkdir src/ \ 
-    && echo 'fn main() { println!("cache dependencies"); }' > src/main.rs
+    && echo 'fn main() { println!("cache dependencies"); }' > src/build.rs
 RUN cargo build --release
 
-RUN rm src/*.rs
-COPY ./src ./src
+RUN rm src/build.rs
+COPY . .
 RUN cargo install --path .
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} debian:buster-slim
