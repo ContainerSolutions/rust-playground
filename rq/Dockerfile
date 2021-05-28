@@ -4,7 +4,7 @@ WORKDIR /usr/src/rq
 COPY Cargo.toml Cargo.lock ./
 
 RUN mkdir src/ \ 
-    && echo "fn main() { println!("cache dependencies"); }" > src/main.rs
+    && echo 'fn main() { println!("cache dependencies"); }' > src/main.rs
 RUN cargo build --release
 
 COPY . .
