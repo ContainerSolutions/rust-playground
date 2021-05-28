@@ -1,5 +1,6 @@
 FROM --platform=${BUILDPLATFORM:-linux/amd64} rust:1.52.1 as builder
 WORKDIR /usr/src/rq
+RUN rustup default nightly
 
 COPY Cargo.toml Cargo.lock ./
 
