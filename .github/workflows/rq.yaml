@@ -44,7 +44,7 @@ jobs:
         VERSION=rq-edge
         
         if [[ $GITHUB_REF == refs/tags/* ]]; then
-          VERSION=rq-${GITHUB_REF#refs/tags/}
+          VERSION=${GITHUB_REF#refs/tags/}
           IS_LATEST=true
         elif [[ $GITHUB_REF == refs/heads/* ]]; then
           VERSION=rq-$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
