@@ -7,7 +7,7 @@ extern crate lazy_static;
 #[macro_use]
 extern crate log;
 
-use prometheus::Counter;
+use prometheus::{IntCounter, IntCounterVec};
 use warp::Filter;
 
 mod handlers;
@@ -15,17 +15,32 @@ mod handlers;
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 lazy_static! {
-    static ref PLAYGROUND_HTTP_REQUESTS: Counter = register_counter!(opts!(
-        "playground_http_requests_total",
+    static ref PLAYGROUND_REQUESTS_TOTAL: IntCounter = register_int_counter!(opts!(
+        "playground_requests_total",
         "Total number of HTTP requests made to /playground.",
+        labels! {"handler" => "playground",}
+    ))
+    .unwrap();
+    static ref INDEX_REQUESTS_TOTAL: IntCounter = register_int_counter!(opts!(
+        "index_requests_total",
+        "Total number of HTTP requests made to /.",
+        labels! {"handler" => "index",}
+    ))
+    .unwrap();
+    static ref REQUESTS_TOTAL: IntCounter = register_int_counter!(opts!(
+        "requests_total",
+        "Total number of HTTP requests made to app on all routes except /metrics",
         labels! {"handler" => "all",}
     ))
     .unwrap();
-    static ref MAIN_HTTP_REQUESTS: Counter = register_counter!(opts!(
-        "main_http_requests_total",
-        "Total number of HTTP requests made to /.",
-        labels! {"handler" => "all",}
-    ))
+    static ref RESPONSE_CODES: IntCounterVec = register_int_counter_vec!(
+        opts!(
+            "response_codes",
+            "Response codes vec from app",
+            labels! {"handler" => "response codes",}
+        ),
+        &["statusCode", "type"]
+    )
     .unwrap();
 }
 
@@ -34,6 +49,10 @@ async fn main() {
     pretty_env_logger::init();
 
     let index = warp::path::end().and(warp::get()).and_then(handlers::index);
+
+    let health = warp::path("health")
+        .and(warp::get())
+        .and_then(handlers::health);
 
     let version = warp::path("version")
         .and(warp::get())
@@ -47,7 +66,14 @@ async fn main() {
         .and(warp::get())
         .and_then(handlers::metrics);
 
-    let routes = index.or(metrics).or(playground).or(version);
+    let bad = warp::path("bad").and(warp::get()).and_then(handlers::bad);
+
+    let routes = index
+        .or(health)
+        .or(metrics)
+        .or(playground)
+        .or(version)
+        .or(bad);
 
     info!("rq starting: {}", VERSION);
     warp::serve(routes).run(([0, 0, 0, 0], 8000)).await;
