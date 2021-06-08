@@ -1,6 +1,6 @@
 [package]
 name = "rq"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Eric Caleb <eric.caleb@container-solutions.com>"]
 edition = "2018"
 
