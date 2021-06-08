@@ -3,6 +3,7 @@ kind: Rollout
 metadata:
   name: {{ include "rq.fullname" . }}
 spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: {{ .Values.replicaCount }}
   workloadRef:
     apiVersion: apps/v1
