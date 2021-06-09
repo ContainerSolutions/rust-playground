@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   rq:
   - apiVersion: v2
+    appVersion: rq-v0.4.2
+    created: "2021-06-09T14:25:37.488340627Z"
+    description: rq app
+    digest: a56b6f75c0030bc1fea3821145dd8f5773794d9e401a3ef200ca4f1042a2f21e
+    name: rq
+    type: application
+    urls:
+    - https://github.com/ContainerSolutions/rust-playground/releases/download/rq-0.4.2/rq-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
     appVersion: rq-v0.4.1
     created: "2021-06-09T13:14:19.317906513Z"
     description: rq app
@@ -31,4 +41,4 @@ entries:
     urls:
     - https://github.com/ContainerSolutions/rust-playground/releases/download/rq-0.1.0/rq-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-09T13:14:19.317919614Z"
+generated: "2021-06-09T14:25:37.488399829Z"
