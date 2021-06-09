@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  rq:
+  - apiVersion: v2
+    appVersion: rq-v0.4.0
+    created: "2021-06-09T11:18:48.640542341Z"
+    description: A Helm chart for Kubernetes
+    digest: 57c220868732d71c0735215bf2ffbbcf28f13087047f36a9ab099247b04dd78e
+    name: rq
+    type: application
+    urls:
+    - https://github.com/ContainerSolutions/rust-playground/releases/download/rq-0.1.0/rq-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-06-09T11:18:48.640548742Z"
