@@ -9,7 +9,7 @@ image:
   repository: ghcr.io/containersolutions/rust-playground
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "rq-v0.4.1"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
